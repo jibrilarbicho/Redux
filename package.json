@@ -8,7 +8,9 @@
   "author": "jibril",
   "license": "ISC",
   "dependencies": {
-    "redux": "^5.0.1"
+    "axios": "^1.6.2",
+    "redux": "^5.0.1",
+    "redux-thunk": "^3.1.0"
   },
   "description": ""
 }
