@@ -19,9 +19,10 @@ const resetAction = () => {
   };
 };
 
-const increaseByAmtAction = () => {
+const increaseByAmtAction = (amount) => {
   return {
     type: "INCREASE_BY_AMT",
+    payload: amount,
   };
 };
 const CountReducer = (state = initialState, action) => {
@@ -37,16 +38,20 @@ const CountReducer = (state = initialState, action) => {
     return {
       count: 0,
     };
+  } else if (action.type === "INCREASE_BY_AMT") {
+    return {
+      count: action.payload,
+    };
   }
 };
 const store = createStore(CountReducer);
-store.dispatch(increamentAction());
-store.dispatch(increamentAction());
-store.dispatch(increamentAction());
-store.dispatch(increamentAction());
-console.log(store.getState());
-store.dispatch(decrementAction());
-console.log(store.getState());
+// store.dispatch(increamentAction());
+// store.dispatch(increamentAction());
+// store.dispatch(increamentAction());
+// store.dispatch(increamentAction());
+// console.log(store.getState());
+// store.dispatch(decrementAction());
+// console.log(store.getState());
 
-store.dispatch(resetAction());
+store.dispatch(increaseByAmtAction(10));
 console.log(store.getState());
