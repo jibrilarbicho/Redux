@@ -1,2 +1,3 @@
 npm init
 npm i redux
+npmi react-redux axios redux-thunk

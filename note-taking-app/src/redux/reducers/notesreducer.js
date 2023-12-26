@@ -5,7 +5,7 @@ const notesReducer = (state = initialState, action) => {
   switch (action.type) {
     case "ADD_NOTE":
       const newNote = {
-        id: Math.random,
+        id: Math.random(),
         title: action.payload.title,
         content: action.payload.content,
       };
@@ -21,7 +21,15 @@ const notesReducer = (state = initialState, action) => {
           ? JSON.parse(localStorage.getItem("notes"))
           : [],
       };
-
+    case "DELETE_NOTE":
+      const FilterNote = state.notes.filter(
+        (note) => note.id !== action.payload
+      );
+      localStorage.setItem("notes", JSON.stringify(FilterNote));
+      return {
+        ...state,
+        notes: FilterNote,
+      };
     default:
       return state;
   }
