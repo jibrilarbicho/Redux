@@ -8,14 +8,14 @@ const initialState = {
   users: [],
   user: {},
   useProfile: {},
-  useAuth: {
+  userAuth: {
     loading: false,
     error: null,
     userInfo: {},
   },
 };
 
-const registerUser = createAssyncThunk(
+const registerUserAction = createAssyncThunk(
   "user/regsiter",
   async (
     { fullname, email, password },
@@ -33,6 +33,34 @@ const registerUser = createAssyncThunk(
         email,
         password,
       });
-    } catch (e) {}
+    } catch (e) {
+      return rejectWithValue(e.response.data);
+    }
   }
 );
+const userSlice = createSlice({
+  name: "users",
+  initialState,
+  extraReducers: (builder) => {
+    const usersSlice = createSlice({
+      name: "users",
+      initialState,
+      extraReducers: (builder) => {
+        //register
+        builder.addCase(registerUserAction.pending, (state, action) => {
+          state.loading = true;
+        });
+        builder.addCase(registerUserAction.fulfilled, (state, action) => {
+          state.loading = false;
+          state.userAuth.userInfo = action.payload;
+        });
+        builder.addCase(registerUserAction.rejected, (state, action) => {
+          state.loading = false;
+          state.userAuth.error = action.payload;
+        });
+      },
+    });
+  },
+});
+const userReducer = userSlice.reducer;
+export default userReducer;
