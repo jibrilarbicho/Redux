@@ -11,7 +11,9 @@ const initialState = {
   userAuth: {
     loading: false,
     error: null,
-    userInfo: {},
+    userInfo: localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user"))
+      : null,
   },
 };
 
