@@ -62,6 +62,8 @@ export const loginUserAction = createAsyncThunk(
         },
         config
       );
+      localStorage.setItem("user", JSON.stringify(res.data));
+      return res.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
     }
