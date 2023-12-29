@@ -43,6 +43,30 @@ export const registerUserAction = createAsyncThunk(
     }
   }
 );
+export const loginUserAction = createAsyncThunk(
+  "user/login",
+  async ({ email, password }, { rejectWithValue, getState, dispatch }) => {
+    try {
+      console.log(email, password);
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const res = await axios.post(
+        `https://income-expenses-tracker-web-dev.onrender.com/api/v1/users/login`,
+        {
+          email,
+          password,
+        },
+        config
+      );
+    } catch (e) {
+      return rejectWithValue(e.response.data);
+    }
+  }
+);
 
 const usersSlice = createSlice({
   name: "users",
@@ -57,6 +81,17 @@ const usersSlice = createSlice({
       state.userAuth.userInfo = action.payload;
     });
     builder.addCase(registerUserAction.rejected, (state, action) => {
+      state.loading = false;
+      state.userAuth.error = action.payload;
+    });
+    builder.addCase(loginUserAction.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(loginUserAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.userAuth.userInfo = action.payload;
+    });
+    builder.addCase(loginUserAction.rejected, (state, action) => {
       state.loading = false;
       state.userAuth.error = action.payload;
     });

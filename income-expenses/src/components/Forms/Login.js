@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUserAction } from "../../redux/slice/users/usersSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -12,16 +15,18 @@ const Login = () => {
   const onChangeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const { loading, error, userAuth } = useSelector((state) => state.users);
 
   //---onsubmit handler----
   const onSubmitHandler = (e) => {
     e.preventDefault();
+    dispatch(loginUserAction(formData));
     console.log(formData);
   };
   return (
     <>
       <section className="relative py-16 bg-gray-50">
-        <div className="absolute top-0 left-0 w-full h-96 bg-gray-100" />
+        <div className="absolute top-0 left-0 w-full h-96 bg-gray-800" />
         <div className="relative container px-4 mx-auto">
           <div className="max-w-xl mx-auto py-10 px-8 sm:px-20 bg-white rounded-md">
             <div className="mb-6">
@@ -29,7 +34,12 @@ const Login = () => {
                 Login
               </h4>
             </div>
-            <form action>
+            {userAuth?.error?.message && (
+              <h2 className="text-red-500 text-center">
+                {userAuth?.error?.message}
+              </h2>
+            )}
+            <form onSubmit={onSubmitHandler}>
               <div className="mb-4">
                 <label className="block text-sm leading-6 mb-2" htmlFor>
                   E-mail address
@@ -38,7 +48,7 @@ const Login = () => {
                   name="email"
                   value={email}
                   onChange={onChangeHandler}
-                  className="block w-full p-4 font-heading text-gray-300 placeholder-gray-300 bg-gray-50 rounded outline-none"
+                  className="block w-full p-4 font-heading text-gray-300 placeholder-gray-800 bg-gray-50 rounded outline-none"
                   type="email"
                   placeholder="Type e-mail"
                 />
@@ -57,12 +67,23 @@ const Login = () => {
                 />
               </div>
               <div className="text-right mb-6">
-                <button
-                  className="block w-full py-4 px-6 text-center font-heading font-medium text-base text-white bg-green-500 hover:bg-green-600 border border-green-500 hover:border-green-600 rounded-sm transition duration-200"
-                  type="submit"
-                >
-                  Sign in
-                </button>
+                {loading ? (
+                  <button
+                    className="block w-full py-4 px-6 text-center font-heading font-medium text-base text-white bg-gay-500 hover:bg-green-600 border border-green-500 hover:border-green-600 rounded-sm transition duration-200"
+                    type="submit"
+                  >
+                    Loading...
+                  </button>
+                ) : (
+                  <div className="text-right mb-6">
+                    <button
+                      className="block w-full py-4 px-6 text-center font-heading font-medium text-base text-white bg-green-500 hover:bg-green-600 border border-green-500 hover:border-green-600 rounded-sm transition duration-200"
+                      type="submit"
+                    >
+                      Sign in
+                    </button>
+                  </div>
+                )}
               </div>
               <Link
                 className="block text-indigo-500 font-heading text-center hover:underline mb-6"
