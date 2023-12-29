@@ -23,7 +23,13 @@ const Login = () => {
 
     console.log(formData);
   };
-  const { loading, error, userAuth } = useSelector((state) => state.users);
+  const { loading, userAuth } = useSelector((state) => {
+    return state.users;
+  });
+
+  if (userAuth?.userInfo?.status) {
+    window.location.href = "/login";
+  }
   return (
     <>
       <section className="relative py-16 bg-gray-50">

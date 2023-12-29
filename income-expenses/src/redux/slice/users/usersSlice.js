@@ -40,6 +40,7 @@ export const registerUserAction = createAsyncThunk(
         },
         config
       );
+      return res.data;
     } catch (e) {
       return rejectWithValue(e.response.data);
     }
@@ -73,7 +74,6 @@ export const loginUserAction = createAsyncThunk(
 );
 
 export const logoutUserAction = createAsyncThunk("user/logout", async () => {
-  console.log("jimma");
   localStorage.removeItem("user");
   return null;
 });

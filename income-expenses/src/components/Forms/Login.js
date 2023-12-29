@@ -23,6 +23,9 @@ const Login = () => {
     dispatch(loginUserAction(formData));
     console.log(formData);
   };
+  if (userAuth?.userInfo?.status) {
+    window.location.href = "/dashboard";
+  }
   return (
     <>
       <section className="relative py-16 bg-gray-50">

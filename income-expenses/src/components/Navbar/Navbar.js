@@ -10,6 +10,11 @@ export default function Navbar() {
   const { userInfo } = useSelector((state) => state?.users?.userAuth);
   const isLoggin = userInfo?.token ? true : false;
   const dispatch = useDispatch();
+  const logoutHandler = () => {
+    dispatch(logoutUserAction());
+
+    window.location.href = "/login";
+  };
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -105,7 +110,7 @@ export default function Navbar() {
                 <div className="flex-shrink-0">
                   {isLoggin && (
                     <button
-                      onClick={() => dispatch(logoutUserAction())}
+                      onClick={logoutHandler}
                       type="button"
                       className="relative inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
