@@ -3,11 +3,13 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUserAction } from "../../redux/slice/users/usersSlice";
 
 export default function Navbar() {
   const { userInfo } = useSelector((state) => state?.users?.userAuth);
   const isLoggin = userInfo?.token ? true : false;
+  const dispatch = useDispatch();
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -103,6 +105,7 @@ export default function Navbar() {
                 <div className="flex-shrink-0">
                   {isLoggin && (
                     <button
+                      onClick={() => dispatch(logoutUserAction())}
                       type="button"
                       className="relative inline-flex items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
