@@ -7,7 +7,7 @@ const initialState = {
   error: null,
   users: [],
   user: {},
-  useProfile: [],
+  profile: [],
   userAuth: {
     loading: false,
     error: null,
@@ -77,15 +77,18 @@ export const getProfileAction = createAsyncThunk(
   async (payload, { rejectWithValue, getState, dispatch }) => {
     try {
       const token = getState()?.users?.userAuth?.userInfo?.token;
+      // console.log("token", token);
       const config = {
         headers: {
-          Authorization: `Bearer {token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       const { data } = await axios.get(
         `https://income-expenses-tracker-web-dev.onrender.com/api/v1/users/profile`,
         config
       );
+      // console.log("data", data);
+
       return data;
     } catch (error) {
       return rejectWithValue(error?.resopnes?.data?.message);

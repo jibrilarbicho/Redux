@@ -20,7 +20,7 @@ export const createAccountAction = createAsyncThunk(
           Authorization: `Bearer {token}`,
         },
       };
-      const { data } = await axios.get(
+      const { data } = await axios.post(
         `https://income-expenses-tracker-web-dev.onrender.com/api/v1/accounts`,
         { name, initialBalance, accountType, notes },
         config

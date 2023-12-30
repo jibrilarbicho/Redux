@@ -1,10 +1,10 @@
 import React from "react";
 
-const AccountSummary = ({ useProfile }) => {
-  console.log(useProfile);
+const AccountSummary = ({ profile }) => {
+  console.log(profile);
   return (
     <>
-      {useProfile?.length <= 0 ? (
+      {profile?.length <= 0 ? (
         <h2 className="text-center text-lg mt-5">No Account Summary Found</h2>
       ) : (
         <section className="py-20">
