@@ -8,6 +8,7 @@ const initialState = {
   isAdded: false,
   isUpdated: false,
 };
+
 export const createTransactionAction = createAsyncThunk(
   "transaction/create",
   async (payload, { rejectWithValue, getState, dispatch }) => {
@@ -22,7 +23,7 @@ export const createTransactionAction = createAsyncThunk(
       };
       const { data } = await axios.post(
         `https://income-expenses-tracker-web-dev.onrender.com/api/v1/transactions`,
-        { name, account, transactionType, amount, category, notes },
+        { name, account: payload.id, transactionType, amount, category, notes },
         config
       );
       return data;
@@ -37,15 +38,15 @@ const TransactionSlice = createSlice({
   initialState,
 
   extraReducers: (builder) => {
-    builder.addCase(TransactionSlice.pending, (state, action) => {
+    builder.addCase(createTransactionAction.pending, (state, action) => {
       state.loading = true;
     });
-    builder.addCase(TransactionSlice.fulfilled, (state, action) => {
+    builder.addCase(createTransactionAction.fulfilled, (state, action) => {
       state.loading = false;
       state.isAdded = true;
       state.transaction = action.payload;
     });
-    builder.addCase(TransactionSlice.rejected, (state, action) => {
+    builder.addCase(createTransactionAction.rejected, (state, action) => {
       state.loading = false;
       state.isAdded = false;
       state.transaction = null;
@@ -53,5 +54,5 @@ const TransactionSlice = createSlice({
     });
   },
 });
-const transactioReducer = TransactionSlice.reducer;
-export default transactioReducer;
+const transactionReducer = TransactionSlice.reducer;
+export default transactionReducer;

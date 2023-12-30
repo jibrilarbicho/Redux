@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import TransactionList from "./TransactionList";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleAccountAction } from "../../redux/slice/accounts/accountSlice";
-
+import { createAccountAction } from "../../redux/slice/accounts/accountSlice";
 const AccountDetails = () => {
   const { id } = useParams();
   console.log("id", id);
@@ -78,7 +78,7 @@ const AccountDetails = () => {
               }}
             >
               <Link
-                to={"/add-transaction/1"}
+                to={`/add-transaction/${account?.data?._id}`}
                 type="button"
                 className="inline-flex text-center items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
