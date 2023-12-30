@@ -31,3 +31,27 @@ export const createTransactionAction = createAsyncThunk(
     }
   }
 );
+
+const TransactionSlice = createSlice({
+  name: "transactions",
+  initialState,
+
+  extraReducers: (builder) => {
+    builder.addCase(TransactionSlice.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(TransactionSlice.fulfilled, (state, action) => {
+      state.loading = false;
+      state.isAdded = true;
+      state.transaction = action.payload;
+    });
+    builder.addCase(TransactionSlice.rejected, (state, action) => {
+      state.loading = false;
+      state.isAdded = false;
+      state.transaction = null;
+      state.error = action.payload;
+    });
+  },
+});
+const transactioReducer = TransactionSlice.reducer;
+export default transactioReducer;
