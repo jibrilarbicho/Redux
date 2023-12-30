@@ -2,7 +2,7 @@ import { EyeDropperIcon } from "@heroicons/react/24/outline";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 const initialState = {
-  account: null,
+  account: {},
   accounts: [],
   error: null,
   loading: false,
@@ -31,6 +31,29 @@ export const createAccountAction = createAsyncThunk(
     }
   }
 );
+export const getSingleAccountAction = createAsyncThunk(
+  "account/get-details",
+  async (id, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const token = getState()?.users?.userAuth?.userInfo?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer {token}`,
+        },
+      };
+      const { data } = await axios.get(
+        ` https://income-expenses-tracker-web-dev.onrender.com/api/v1/accounts/${id}`,
+        {},
+
+        config
+      );
+      console.log("data", data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.reasponse?.data);
+    }
+  }
+);
 const AccountSlice = createSlice({
   name: "accounts",
   initialState,
@@ -45,6 +68,20 @@ const AccountSlice = createSlice({
       state.account = action.payload;
     });
     builder.addCase(createAccountAction.rejected, (state, action) => {
+      state.loading = false;
+      state.success = false;
+      state.account = null;
+      state.error = action.payload;
+    });
+    builder.addCase(getSingleAccountAction.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(getSingleAccountAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.account = action.payload;
+    });
+    builder.addCase(getSingleAccountAction.rejected, (state, action) => {
       state.loading = false;
       state.success = false;
       state.account = null;

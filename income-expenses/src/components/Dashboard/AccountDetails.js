@@ -1,8 +1,20 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import TransactionList from "./TransactionList";
+import { useDispatch, useSelector } from "react-redux";
+import { getSingleAccountAction } from "../../redux/slice/accounts/accountSlice";
 
 const AccountDetails = () => {
+  const { id } = useParams();
+  console.log("id", id);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getSingleAccountAction(id));
+  }, [id]);
+  const account = useSelector((state) => state?.accounts);
+  console.log("account1", account.account);
+
   return (
     <>
       {/* Account Summary */}
@@ -16,10 +28,10 @@ const AccountDetails = () => {
         <div className="container px-4 mx-auto">
           <div className="text-center">
             <span className="inline-block py-px px-2 mb-4 text-xs leading-5 text-green-500 bg-green-100 font-medium uppercase rounded-9xl">
-              Your Initial Balance is: $1000
+              Your Initial Balance is: ${account?.account?.data?.initialBalance}
             </span>
             <h3 className="mb-4 text-4xl md:text-5xl text-coolGray-900 font-bold tracking-tighter">
-              Account Details
+              {account?.account?.data?.name}
             </h3>
             <p className=" mx-auto mb-8 text-lg md:text-xl text-coolGray-500 font-medium max-w-4xl">
               Flex is the only business platform that lets you run your business

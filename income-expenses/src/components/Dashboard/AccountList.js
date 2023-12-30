@@ -56,19 +56,18 @@ const AccountList = ({ profile: { accounts } }) => {
                       <div className="flex flex-wrap items-start justify-between p-10 -mx-4">
                         <div className="w-full lg:w-2/3 px-4 mb-6 lg:mb-0">
                           <h3 className="mb-3 text-lg md:text-xl text-coolGray-800 group-hover:text-coolGray-900 font-semibold transition duration-200">
-                            Front-end Developer
+                            {account?.name}{" "}
                           </h3>
                           <p className="text-coolGray-500 font-medium">
-                            We’re looking for a mid-level Front-end Developer to
-                            join our team.
+                            {account?.notes}.
                           </p>
                         </div>
                         <div className="w-full lg:w-1/3 px-4 lg:text-right">
                           <Link
-                            to="/account/2"
+                            to={`/account/${account._id}`}
                             className="inline-flex ml-auto items-center font-medium leading-6 text-green-500 group-hover:text-green-600 transition duration-200"
                           >
-                            <span className="mr-2">View Job</span>
+                            <span className="mr-2">View Account</span>
                             <svg
                               width={20}
                               height={20}
