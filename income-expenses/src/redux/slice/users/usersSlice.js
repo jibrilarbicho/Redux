@@ -7,7 +7,7 @@ const initialState = {
   error: null,
   users: [],
   user: {},
-  useProfile: {},
+  useProfile: [],
   userAuth: {
     loading: false,
     error: null,
@@ -72,6 +72,26 @@ export const loginUserAction = createAsyncThunk(
     }
   }
 );
+export const getProfileAction = createAsyncThunk(
+  "user/getProfile",
+  async (payload, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const token = getState()?.users?.userAuth?.userInfo?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer {token}`,
+        },
+      };
+      const { data } = await axios.get(
+        `https://income-expenses-tracker-web-dev.onrender.com/api/v1/users/profile`,
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.resopnes?.data?.message);
+    }
+  }
+);
 
 export const logoutUserAction = createAsyncThunk("user/logout", async () => {
   localStorage.removeItem("user");
@@ -108,6 +128,18 @@ const usersSlice = createSlice({
     builder.addCase(logoutUserAction.fulfilled, (state, action) => {
       state.loading = false;
       state.userAuth.userInfo = null;
+    });
+    builder.addCase(getProfileAction.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(getProfileAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.profile = action.payload;
+    });
+    builder.addCase(getProfileAction.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.profile = "";
     });
   },
 });

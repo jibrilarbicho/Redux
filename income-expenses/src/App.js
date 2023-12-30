@@ -9,7 +9,7 @@ import EditTransaction from "./components/Forms/EditTransaction";
 import AddAccount from "./components/Forms/AddAccount";
 import EditAccount from "./components/Forms/EditAccount";
 import Login from "./components/Forms/Login";
-
+import AuthoRoute from "./components/AuthRoute/AuthoRoute";
 function App() {
   return (
     <BrowserRouter>
@@ -17,7 +17,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<MainDashBoard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <AuthoRoute>
+              <MainDashBoard />
+            </AuthoRoute>
+          }
+        />
         <Route path="/account" element={<AccountDetails />} />
         <Route path="/account/:id" element={<AccountDetails />} />
         <Route path="/add-transaction/:id" element={<AddTransaction />} />
