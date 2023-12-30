@@ -1,5 +1,5 @@
 import { EyeDropperIcon } from "@heroicons/react/24/outline";
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 const initialState = {
   account: null,
@@ -31,3 +31,26 @@ export const createAccountAction = createAsyncThunk(
     }
   }
 );
+const AccountSlice = createSlice({
+  name: "accounts",
+  initialState,
+
+  extraReducers: (builder) => {
+    builder.addCase(createAccountAction.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(createAccountAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.account = action.payload;
+    });
+    builder.addCase(createAccountAction.rejected, (state, action) => {
+      state.loading = false;
+      state.success = false;
+      state.account = null;
+      state.error = action.payload;
+    });
+  },
+});
+const accountsReducer = AccountSlice.reducer;
+export default accountsReducer;
