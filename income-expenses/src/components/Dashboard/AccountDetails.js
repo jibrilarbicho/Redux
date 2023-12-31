@@ -7,13 +7,29 @@ const AccountDetails = () => {
   const { id } = useParams();
   console.log("id", id);
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(getSingleAccountAction(id));
   }, [id]);
   const account = useSelector((state) => state?.accounts);
   console.log("account1", account.account);
-
+  const transactions = account?.account?.data?.transactions;
+  const TotalIncome = transactions
+    ?.filter((transaction) => {
+      return transaction.transactionType === "Income";
+    })
+    .reduce((acc, curr) => {
+      return acc + curr.amount;
+    }, 0);
+  const TotalExpenses = transactions
+    ?.filter((transaction) => {
+      return transaction.transactionType === "Expenses";
+    })
+    .reduce((acc, curr) => {
+      return acc + curr.amount;
+    }, 0);
+  console.log("Total", TotalIncome);
+  const TotalBalanace = TotalIncome - TotalExpenses;
+  console.log(TotalBalanace);
   return (
     <>
       {account?.account?.loading && (
@@ -51,7 +67,7 @@ const AccountDetails = () => {
             <div className="flex flex-wrap justify-center -mx-4">
               <div className="w-full md:w-1/3 lg:w-1/4 px-4 mb-8 lg:mb-0">
                 <h2 className="mb-2 text-4xl md:text-5xl text-red-600 font-bold tracking-tighter">
-                  $900
+                  ${TotalExpenses}
                 </h2>
                 <p className="text-lg md:text-xl text-coolGray-500 font-medium">
                   Expenses
@@ -59,7 +75,7 @@ const AccountDetails = () => {
               </div>
               <div className="w-full md:w-1/3 lg:w-1/4 px-4 mb-8 lg:mb-0">
                 <h2 className="mb-2 text-4xl md:text-5xl text-coolGray-900 font-bold tracking-tighter">
-                  $30.000
+                  ${TotalIncome}
                 </h2>
                 <p className="text-lg md:text-xl text-green-500 font-medium">
                   Income
@@ -67,7 +83,7 @@ const AccountDetails = () => {
               </div>
               <div className="w-full md:w-1/3 lg:w-1/4 px-4">
                 <h2 className="mb-2 text-4xl md:text-5xl text-coolGray-900 font-bold tracking-tighter">
-                  $ 500
+                  $ {TotalBalanace}
                 </h2>
                 <p className="text-lg md:text-xl text-blue-500 font-medium">
                   Balance
