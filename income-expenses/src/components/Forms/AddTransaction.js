@@ -76,7 +76,7 @@ const AddTransaction = () => {
                 value={category}
                 onChange={onChange}
                 name="category"
-                class="appearance-none block w-full py-3 px-4 leading-tight text-gray-700 bg-gray-200 focus:bg-white border border-gray-200 focus:border-gray-500 rounded focus:outline-none"
+                className="appearance-none block w-full py-3 px-4 leading-tight text-gray-700 bg-gray-200 focus:bg-white border border-gray-200 focus:border-gray-500 rounded focus:outline-none"
               >
                 <option>-- Select Category --</option>
                 <option value="Personal">Personal</option>
@@ -106,7 +106,7 @@ const AddTransaction = () => {
             </button>
             <p className="font-medium">
               <Link
-                to={"/account/3"}
+                to={`/account/${id}`}
                 className="text-indigo-600 hover:text-indigo-700"
                 href="#"
               >
