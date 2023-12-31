@@ -14,11 +14,10 @@ export const createTransactionAction = createAsyncThunk(
   async (payload, { rejectWithValue, getState, dispatch }) => {
     try {
       const token = getState()?.users?.userAuth?.userInfo?.token;
-      const { name, account, transactionType, amount, category, notes } =
-        payload;
+      const { name, transactionType, amount, category, notes } = payload;
       const config = {
         headers: {
-          Authorization: `Bearer {token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       const { data } = await axios.post(
@@ -26,9 +25,10 @@ export const createTransactionAction = createAsyncThunk(
         { name, account: payload.id, transactionType, amount, category, notes },
         config
       );
+      console.log("data", data);
       return data;
     } catch (error) {
-      return rejectWithValue(error?.reasponse?.data);
+      return rejectWithValue(error?.response?.data);
     }
   }
 );

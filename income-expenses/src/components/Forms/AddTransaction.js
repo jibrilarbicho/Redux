@@ -41,7 +41,7 @@ const AddTransaction = () => {
               <input
                 value={name}
                 onChange={onChange}
-                name="title"
+                name="name"
                 className="px-4 py-3.5 w-full text-gray-500 font-medium placeholder-gray-500 bg-white outline-none border border-gray-300 rounded-lg focus:ring focus:ring-indigo-300"
                 id="signUpInput2-1"
                 type="text"
@@ -61,10 +61,10 @@ const AddTransaction = () => {
             </label>
             <label className="block mb-5">
               <select
-                value={category}
+                value={transactionType}
                 onChange={onChange}
                 name="transactionType"
-                class="appearance-none block w-full py-3 px-4 leading-tight text-gray-700 bg-gray-200 focus:bg-white border border-gray-200 focus:border-gray-500 rounded focus:outline-none"
+                className="appearance-none block w-full py-3 px-4 leading-tight text-gray-700 bg-gray-200 focus:bg-white border border-gray-200 focus:border-gray-500 rounded focus:outline-none"
               >
                 <option>-- Select Transaction Type --</option>
                 <option value="Income">Income</option>
@@ -73,7 +73,7 @@ const AddTransaction = () => {
             </label>
             <label className="block mb-5">
               <select
-                value={transactionType}
+                value={category}
                 onChange={onChange}
                 name="category"
                 class="appearance-none block w-full py-3 px-4 leading-tight text-gray-700 bg-gray-200 focus:bg-white border border-gray-200 focus:border-gray-500 rounded focus:outline-none"
@@ -85,16 +85,6 @@ const AddTransaction = () => {
               </select>
             </label>
 
-            <label className="block mb-5">
-              <input
-                value={date}
-                onChange={onChange}
-                name="date"
-                className="px-4 py-3.5 w-full text-gray-500 font-medium placeholder-gray-500 bg-white outline-none border border-gray-300 rounded-lg focus:ring focus:ring-indigo-300"
-                id="signUpInput2-2"
-                type="date"
-              />
-            </label>
             <div>
               <div className="mt-3 mb-3">
                 <textarea
@@ -114,7 +104,6 @@ const AddTransaction = () => {
             >
               Create Transaction
             </button>
-
             <p className="font-medium">
               <Link
                 to={"/account/3"}

@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import TransactionList from "./TransactionList";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleAccountAction } from "../../redux/slice/accounts/accountSlice";
-import { createAccountAction } from "../../redux/slice/accounts/accountSlice";
 const AccountDetails = () => {
   const { id } = useParams();
   console.log("id", id);
@@ -17,6 +16,12 @@ const AccountDetails = () => {
 
   return (
     <>
+      {account?.account?.loading && (
+        <h2 className="text-center text-indigo-800">Loading</h2>
+      )}
+      {account?.account?.error && (
+        <h2 className="text-center text-red-500 text-2xl">Error</h2>
+      )}
       {/* Account Summary */}
       <section
         className="py-20 xl:pt-24 xl:pb-32 bg-white"
@@ -78,7 +83,7 @@ const AccountDetails = () => {
               }}
             >
               <Link
-                to={`/add-transaction/${account?.data?._id}`}
+                to={`/add-transaction/${account?.account?.data?._id}`}
                 type="button"
                 className="inline-flex text-center items-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
@@ -88,8 +93,13 @@ const AccountDetails = () => {
           </div>
         </div>
       </section>
-
-      <TransactionList />
+      {account?.account?.data?.transactions?.length <= 0 ? (
+        <h2>No Account Transaction Found</h2>
+      ) : account?.account?.loading ? (
+        <h2>Loading</h2>
+      ) : (
+        <TransactionList transactions={account?.account?.data?.transactions} />
+      )}
     </>
   );
 };
