@@ -17,7 +17,7 @@ export const createAccountAction = createAsyncThunk(
       const { name, initialBalance, accountType, notes } = payload;
       const config = {
         headers: {
-          Authorization: `Bearer {token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       const { data } = await axios.post(
@@ -27,7 +27,33 @@ export const createAccountAction = createAsyncThunk(
       );
       return data;
     } catch (error) {
-      return rejectWithValue(error?.reasponse?.data);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+export const updateAccountAction = createAsyncThunk(
+  "account/update",
+  async (payload, { rejectWithValue, getState, dispatch }) => {
+    try {
+      console.log("payload", payload);
+      const token = getState()?.users?.userAuth?.userInfo?.token;
+      const { name, initialBalance, accountType, notes, id } = payload;
+      console.log("idddddddddddddddd");
+      console.log("idddd", id);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `https://income-expenses-tracker-web-dev.onrender.com/api/v1/accounts/${id}`,
+        { name, initialBalance, accountType, notes },
+        config
+      );
+      console.log("data", data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
     }
   }
 );
@@ -38,7 +64,7 @@ export const getSingleAccountAction = createAsyncThunk(
       const token = getState()?.users?.userAuth?.userInfo?.token;
       const config = {
         headers: {
-          Authorization: `Bearer {token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       const { data } = await axios.get(
@@ -50,7 +76,7 @@ export const getSingleAccountAction = createAsyncThunk(
       console.log("data", data);
       return data;
     } catch (error) {
-      return rejectWithValue(error?.reasponse?.data);
+      return rejectWithValue(error?.response?.data);
     }
   }
 );
@@ -85,6 +111,22 @@ const AccountSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.account = null;
+      state.error = action.payload;
+    });
+    builder.addCase(updateAccountAction.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(updateAccountAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.isUpdated = true;
+      state.account = action.payload;
+    });
+    builder.addCase(updateAccountAction.rejected, (state, action) => {
+      state.loading = false;
+      state.success = false;
+      state.account = null;
+      state.isUpdated = false;
       state.error = action.payload;
     });
   },

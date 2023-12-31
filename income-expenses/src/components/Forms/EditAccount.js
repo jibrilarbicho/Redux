@@ -1,25 +1,43 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import {
+  getSingleAccountAction,
+  updateAccountAction,
+} from "../../redux/slice/accounts/accountSlice";
 
 const EditAccount = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getSingleAccountAction(id));
+  }, [id, dispatch]);
+
+  const { account, loading, error, isUpdated } = useSelector(
+    (state) => state.accounts
+  );
   const [transaction, setTransaction] = useState({
-    title: "",
-    initialBalance: "",
-    transactionType: "",
-    notes: "",
-    accountType: "",
+    name: account?.data?.name,
+    initialBalance: account?.data?.initialBalance,
+    transactionType: account?.data?.transactionType,
+    notes: account?.data?.notes,
+    accountType: account?.data?.accountType,
   });
   //---Destructuring---
-  const { title, initialBalance, accountType, notes } = transaction;
+  const { name, initialBalance, accountType, notes } = transaction;
   //---onchange handler----
   const onChange = (e) => {
     setTransaction({ ...transaction, [e.target.name]: e.target.value });
   };
 
+  console.log("Acccccounts", account);
+
   //---onsubmit handler----
   const onSubmit = (e) => {
     e.preventDefault();
     console.log(transaction);
+    dispatch(updateAccountAction({ ...transaction, id }));
   };
   return (
     <section className="py-16 xl:pb-56 bg-white overflow-hidden">
@@ -29,14 +47,14 @@ const EditAccount = () => {
             Edit Account
           </h2>
           <p className="mb-12 font-medium text-lg text-gray-600 leading-normal">
-            You are editing....
+            You are editing....{account?.data?.name} Projects
           </p>
           <form onSubmit={onSubmit}>
             <label className="block mb-5">
               <input
-                value={title}
+                value={name}
                 onChange={onChange}
-                name="title"
+                name="name"
                 className="px-4 py-3.5 w-full text-gray-500 font-medium placeholder-gray-500 bg-white outline-none border border-gray-300 rounded-lg focus:ring focus:ring-indigo-300"
                 id="signUpInput2-1"
                 type="text"
@@ -99,9 +117,9 @@ const EditAccount = () => {
               type="submit"
               className="mb-8 py-4 px-9 w-full text-white font-semibold border border-indigo-700 rounded-xl shadow-4xl focus:ring focus:ring-indigo-300 bg-indigo-600 hover:bg-indigo-700 transition ease-in-out duration-200"
             >
-              Create Account
+              Update Account
             </button>
-            <Link to={"/account/8"} className="font-medium">
+            <Link to={`/account/${account?.data?.id}`} className="font-medium">
               <a className="text-indigo-600 hover:text-indigo-700" href="#">
                 Back To Account
               </a>
